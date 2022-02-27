@@ -1,0 +1,56 @@
+version: '3.3'
+
+services:
+  mysql:
+    image: mysql:8.0.23
+    container_name: mysql_store_chain
+    hostname: mysql_store_chain
+    environment:
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db_root_password
+      - MYSQL_DATABASE=store_chain
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD_FILE=/run/secrets/db_password
+    restart: unless-stopped
+    labels:
+      - traefik.enable=false
+    networks:
+      - default
+    ports:
+      - 127.0.0.1:33091:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    secrets:
+      - db_root_password
+      - db_password
+  app:
+    build: .
+    container_name: app_store_chain
+    hostname: app_store_chain
+    restart: unless-stopped
+    links:
+      - mysql
+    external_links:
+      - traefik
+    networks:
+      - internal
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.store_chain_local.rule=Host(`store_chain.docker.localhost`)"
+      - "traefik.http.routers.store_chain.entrypoints=web"
+      - "traefik.docker.network=internal"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - mysql
+secrets:
+  db_root_password:
+    file: db_root_password.txt
+  db_password:
+    file: db_password.txt
+volumes:
+  mysql-data:
+networks:
+  default:
+  internal:
+    external: true
