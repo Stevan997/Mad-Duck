@@ -19,6 +19,7 @@ class CreateBoughtProductsTable extends Migration
             $table->integer('product_id');
             $table->integer('price');
             $table->integer('quantity');
+            $table->integer('serial_number')->nullable()->default(null);
             $table->timestamps();
         });
     }
