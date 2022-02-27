@@ -11,7 +11,7 @@ class BoughtProduct extends Model
 
     protected $table = 'bought_products';
 
-    protected $fillable = ['bill_id', 'product_id', 'quantity', 'price', 'serial_number'];
+    protected $fillable = ['bill_id', 'product_id', 'quantity', 'price'];
 
     public function product()
     {

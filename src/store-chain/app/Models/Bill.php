@@ -11,10 +11,15 @@ class Bill extends Model
 
     protected $table = 'bills';
 
-    protected $fillable = ['number', 'first_name', 'last_name', 'telephone'];
+    protected $fillable = ['serial_number', 'first_name', 'last_name', 'telephone', 'store_id'];
 
     public function products()
     {
         return $this->hasMany(BoughtProduct::class);
+    }
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
     }
 }

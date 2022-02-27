@@ -15,10 +15,11 @@ class CreateBillsTable extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
-            $table->integer('number');
+            $table->integer('serial_number')->nullable()->default(null);
             $table->string('first_name', 255);
             $table->string('last_name', 255);
             $table->integer('telephone_number');
+            $table->integer('store_id');
             $table->softDeletes();
             $table->timestamps();
         });
